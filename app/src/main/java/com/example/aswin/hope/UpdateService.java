@@ -137,16 +137,18 @@ public class UpdateService extends Service implements SensorEventListener {
 //            }
 //        }
         if(screenOff){
-            Cursor res = db.getAllSecurity();
-
-            StringBuffer buffer = new StringBuffer();
-            while (res.moveToNext()) {
-                buffer.append("TIME:"+ res.getString(0));
-                buffer.append("ACCX :"+ res.getString(1));
-                buffer.append("ACCY:"+ res.getString(2));
-                buffer.append("ACCZ :"+ res.getString(3)+"\n");
-            }
-            Log.d("hihi",buffer.toString());
+//            Cursor res = db.getAllSecurity();
+//
+//            StringBuffer buffer = new StringBuffer();
+//            while (res.moveToNext()) {
+//                buffer.append("TIME:"+ res.getString(0));
+//                buffer.append("ACCX :"+ res.getString(1));
+//                buffer.append("ACCY:"+ res.getString(2));
+//                buffer.append("ACCZ :"+ res.getString(3)+"\n");
+//            }
+//            res.moveToFirst();
+//           // Log.d("hihi",buffer.toString());
+            Log.d("this is the count",String.valueOf(db.getSecurityCount()));
 
         }
 
@@ -187,12 +189,14 @@ public class UpdateService extends Service implements SensorEventListener {
             Date d = new Date();
             String dayOfTheWeek = sdf.format(d);
 
+
             SimpleDateFormat railwaytime = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String timenow = railwaytime.format(new Date());
-            //db.addSecurity(new Security(1,"2",dayOfTheWeek,"fish"));
+            db.addSecurity(new Security(timenow,"2",dayOfTheWeek,"fish"));
+
             Time today = new Time(Time.getCurrentTimezone());
             today.setToNow();
-            db.addSecurity(new Security(Integer.parseInt(timenow),"7",dayOfTheWeek,"10"));
+            //db.addSecurity(new Security(45,"7",dayOfTheWeek,"10"));
             //today.monthDay Day of the month (1-31)
             // today.month Month (0-11)
             // today.year Year

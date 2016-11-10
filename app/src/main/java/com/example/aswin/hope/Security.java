@@ -9,7 +9,7 @@ import java.sql.Time;
 public class Security {
 
     //private variables
-    int time;
+    String time;
     String accx;
     String accy;
     String accz;
@@ -18,7 +18,7 @@ public class Security {
 
     }
     // constructor
-    public Security(int time,String accx,String accy,String accz){
+    public Security(String time,String accx,String accy,String accz){
         this.time=time;
         this.accx = accx;
         this.accy = accy;
@@ -27,12 +27,12 @@ public class Security {
 
 
     // getting ID
-    public int getTime(){
+    public String getTime(){
         return this.time;
     }
 
     // setting id
-    public void setTime(int time){
+    public void setTime(String time){
         this.time = time;
     }
 
