@@ -14,6 +14,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -32,37 +33,48 @@ public class UpdateService extends Service implements SensorEventListener {
     public SensorManager SM,SM2;
     private Timer mTimer;
     private boolean shouldDo=true;
+    public int value=1;
 
     @Override
     public void onCreate() {
        super.onCreate();
-
+        Log.d("what","erroring");
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new ScreenReciever();
         registerReceiver(mReceiver, filter);
     }
 
-   /* int i=0;
-    CountDownTimer countDownTimer = new CountDownTimer(5000,5000) {
+
+    CountDownTimer countDownTimer = new CountDownTimer(1000,1000) {
 
         @Override
         public void onTick(long millisUntilFinished) {
-                i=1-i;
-                Log.d("check", Integer.toString(i));
+
+                value=1-value;
         }
 
         @Override
         public void onFinish() {
-            //i=1-i;
-            shouldDo = true;
-            Log.d("counter","finish");
-            showNotification();
             start();
         }
     }.start();
+//    private final int FIVE_SECONDS = 5000;
+//
+//    public void scheduleSendLocation() {
+//        handler.postDelayed(new Runnable() {
+//            public void run() {
+//
+//                handler.postDelayed(this, FIVE_SECONDS);
+//            }
+//        }, FIVE_SECONDS);
+//    }
+//
+//    Handler handler = new Handler();
+//    handler.postDelayed
 
-    public void showNotification() {
+
+   /* public void showNotification() {
 
 
             mBuilder =
@@ -81,9 +93,11 @@ public class UpdateService extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        if(intent!=null)
-            Log.d("fish","fishing");
+       // Log.d("what","error");
+       // if(intent!=null)
+         //   Log.d("fish","fishing");
+        SM = (SensorManager) getSystemService(SENSOR_SERVICE);
+        SM2 = (SensorManager) getSystemService(SENSOR_SERVICE);
 
        /* mBuilder =
                 new NotificationCompat.Builder(this)
@@ -98,18 +112,15 @@ public class UpdateService extends Service implements SensorEventListener {
         mNotificationManager.notify(0, mBuilder.build());
 
         boolean screenOn = intent.getBooleanExtra("screen_state", false);*/
-        boolean screenOn= true;
+        boolean screenOff= ScreenReciever.screenOff;
         Log.d(String.valueOf(ScreenReciever.screenOff),"screen thing");
 
 
-        Log.d("debug","getting something");
-        if (!screenOn) {
+       // Log.d("debug","getting something");
+        if (!screenOff) {
             // your code
             //Create our sensor manager
            // countDownTimer.start();
-            SM = (SensorManager) getSystemService(SENSOR_SERVICE);
-            SM2 = (SensorManager) getSystemService(SENSOR_SERVICE);
-
             //Accelometer sensor
 
             mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -136,7 +147,7 @@ public class UpdateService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (shouldDo == true) {
+        if (value==1) {
             Log.d("final", "data changed");
             //Toast.makeText(this, "collecting", Toast.LENGTH_SHORT).show();
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -153,7 +164,6 @@ public class UpdateService extends Service implements SensorEventListener {
 //            zGyro.setText("Z : " + event.values[2]);
             }
         }
-        shouldDo=false;
     }
 
 //    TimerTask timerTask = new TimerTask() {

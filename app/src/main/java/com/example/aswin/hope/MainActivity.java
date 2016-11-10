@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void onClick(View v){
+        Log.d("what is happ","Min");
         Intent i = new Intent(this,UpdateService.class);
         startService(i);
     }
