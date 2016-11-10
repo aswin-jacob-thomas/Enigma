@@ -22,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "Securit.db";
+    private static final String DATABASE_NAME = "Secur7.db";
 
     // Contacts table name
     private static final String TABLE_SECURITY = "security";
@@ -32,6 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_ACCY = "accy";
     private static final String KEY_ACCZ = "accz";
     private static final String KEY_TIME = "timestamp";
+    private static final String KEY_DAY = "dayoftheweek";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,6 +43,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_SECURITY_TABLE = "CREATE TABLE " + TABLE_SECURITY + "("
                 + KEY_TIME + " TEXT PRIMARY KEY,"
+                + KEY_DAY + " TEXT,"
                 + KEY_ACCX + " TEXT," + KEY_ACCY + " TEXT,"
                 + KEY_ACCZ + " TEXT" + ")";
         db.execSQL(CREATE_SECURITY_TABLE);
@@ -67,13 +69,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_TIME,security.getTime());
+        values.put(KEY_DAY,security.getDayoftheweek());
         values.put(KEY_ACCX, security.getAccx());
         values.put(KEY_ACCY, security.getAccy());
         values.put(KEY_ACCZ, security.getAccz());
         Log.d("hey siri",security.getTime()+security.getAccy()+security.getAccz());
         // Inserting Row
-        db.insert(TABLE_SECURITY, null, values);
-        Log.d("adding","dbpart");
+        long result =db.insert(TABLE_SECURITY, null, values);
+        if(result==-1)
+        Log.d("adding","erroring");
         db.close(); // Closing database connection
     }
 /*
@@ -154,10 +158,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_SECURITY;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
+        int count=0;
+        count=cursor.getCount();
 
+
+
+
+        Log.d("wht is the count", String.valueOf(count));
+        //cursor.close();
         // return count
-        return cursor.getCount();
+        return count;
     }
 
 }

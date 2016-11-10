@@ -10,6 +10,7 @@ public class Security {
 
     //private variables
     String time;
+    String dayoftheweek;
     String accx;
     String accy;
     String accz;
@@ -18,8 +19,9 @@ public class Security {
 
     }
     // constructor
-    public Security(String time,String accx,String accy,String accz){
+    public Security(String time,String dayoftheweek,String accx,String accy,String accz){
         this.time=time;
+        this.dayoftheweek=dayoftheweek;
         this.accx = accx;
         this.accy = accy;
         this.accz=accz;
@@ -31,6 +33,12 @@ public class Security {
         return this.time;
     }
 
+    public String getDayoftheweek(){
+        return this.dayoftheweek;
+    }
+    public void setDayoftheweek(String dayoftheweek){
+        this.dayoftheweek=dayoftheweek;
+    }
     // setting id
     public void setTime(String time){
         this.time = time;

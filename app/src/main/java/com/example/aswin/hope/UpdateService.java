@@ -54,7 +54,7 @@ public class UpdateService extends Service implements SensorEventListener {
     }
 
 
-    CountDownTimer countDownTimer = new CountDownTimer(1000,1000) {
+    CountDownTimer countDownTimer = new CountDownTimer(100000,5000) {
 
         @Override
         public void onTick(long millisUntilFinished) {
@@ -137,18 +137,20 @@ public class UpdateService extends Service implements SensorEventListener {
 //            }
 //        }
         if(screenOff){
-//            Cursor res = db.getAllSecurity();
-//
-//            StringBuffer buffer = new StringBuffer();
-//            while (res.moveToNext()) {
-//                buffer.append("TIME:"+ res.getString(0));
-//                buffer.append("ACCX :"+ res.getString(1));
-//                buffer.append("ACCY:"+ res.getString(2));
-//                buffer.append("ACCZ :"+ res.getString(3)+"\n");
-//            }
-//            res.moveToFirst();
-//           // Log.d("hihi",buffer.toString());
-            Log.d("this is the count",String.valueOf(db.getSecurityCount()));
+            Cursor res = db.getAllSecurity();
+            StringBuffer buffer = new StringBuffer();
+            int i=0;
+            while (res.moveToNext()) {
+                i++;
+                buffer.append("TIME:"+ res.getString(0));
+                buffer.append("ACCX :"+ res.getString(1));
+                buffer.append("ACCY:"+ res.getString(2));
+                buffer.append("ACCZ :"+ res.getString(3)+"\n");
+            }
+            res.close();
+           Log.d("hihi",buffer.toString());
+            Log.d("counting",String.valueOf(i));
+            Log.d("Achodaa",String.valueOf(db.getSecurityCount()));
 
         }
 
@@ -192,7 +194,6 @@ public class UpdateService extends Service implements SensorEventListener {
 
             SimpleDateFormat railwaytime = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String timenow = railwaytime.format(new Date());
-            db.addSecurity(new Security(timenow,"2",dayOfTheWeek,"fish"));
 
             Time today = new Time(Time.getCurrentTimezone());
             today.setToNow();
@@ -204,6 +205,9 @@ public class UpdateService extends Service implements SensorEventListener {
 
 
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+                db.addSecurity(new Security(String.valueOf(System.currentTimeMillis()),dayOfTheWeek,String.valueOf(event.values[0]),String.valueOf(event.values[1])
+                                                ,String.valueOf(event.values[2])));
 
 //            xText.setText("X : " + event.values[0]);
 //            yText.setText("Y : " + event.values[1]);
