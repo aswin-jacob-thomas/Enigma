@@ -13,6 +13,7 @@ package com.example.aswin.hope;
         import android.database.sqlite.SQLiteDatabase;
         import android.database.sqlite.SQLiteOpenHelper;
         import android.util.Log;
+        import android.widget.Toast;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -21,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "Security";
+    private static final String DATABASE_NAME = "Securities.db";
 
     // Contacts table name
     private static final String TABLE_SECURITY = "security";
@@ -41,8 +42,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_SECURITY_TABLE = "CREATE TABLE " + TABLE_SECURITY + "("
                 + KEY_TIME + " INTEGER PRIMARY KEY,"
-                + KEY_ACCX + " INTEGER," + KEY_ACCY + " INTEGER,"
-                + KEY_ACCZ + " INTEGER" + ")";
+                + KEY_ACCX + " TEXT," + KEY_ACCY + " TEXT,"
+                + KEY_ACCZ + " TEXT" + ")";
         db.execSQL(CREATE_SECURITY_TABLE);
     }
 
@@ -65,17 +66,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_TIME,security.getTime());
         values.put(KEY_ACCX, security.getAccx());
         values.put(KEY_ACCY, security.getAccy());
         values.put(KEY_ACCZ, security.getAccz());
-
+        Log.d("hey siri",security.getAccx()+security.getAccy()+security.getAccz());
         // Inserting Row
         db.insert(TABLE_SECURITY, null, values);
         Log.d("adding","dbpart");
         db.close(); // Closing database connection
     }
-
+/*
     // Getting single contact
     Security getSecurity(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -90,34 +90,41 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cursor.getString(1), cursor.getString(2),cursor.getString(3));
         // return contact
         return security;
-    }
+    }*/
 
-    // Getting All Contacts
-    public List<Security> getAllSecurity() {
-        List<Security> securityList = new ArrayList<Security>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_SECURITY;
-
+    public Cursor getAllSecurity() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Security security = new Security();
-                security.setTime(Integer.parseInt(cursor.getString(0)));
-                security.setAccx(cursor.getString(1));
-                security.setAccy(cursor.getString(2));
-                security.setAccz(cursor.getString(3));
-
-                // Adding contact to list
-                securityList.add(security);
-            } while (cursor.moveToNext());
-        }
-
-        // return contact list
-        return securityList;
+        Cursor res = db.rawQuery("select * from "+TABLE_SECURITY,null);
+        return res;
     }
+    // Getting All Contacts
+//    public List<Security> getAllSecurity() {
+//        List<Security> securityList = new ArrayList<Security>();
+//        // Select All Query
+//        String selectQuery = "SELECT  * FROM " + TABLE_SECURITY;
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = db.rawQuery(selectQuery, null);
+//
+//        // looping through all rows and adding to list
+//        if (cursor.moveToFirst()) {
+//            do {
+//                Security security = new Security();
+//                security.setTime(Integer.parseInt(cursor.getString(0)));
+//                security.setAccx(cursor.getString(1));
+//                security.setAccy(cursor.getString(2));
+//                security.setAccz(cursor.getString(3));
+//
+//                Log.d("taging",cursor.getString(2));
+//
+//                // Adding contact to list
+//                securityList.add(security);
+//            } while (cursor.moveToNext());
+//        }
+//
+//        // return contact list
+//        return securityList;
+//    }
 
    /* // Updating single contact
     public int updateSecurity(Security security) {
@@ -133,12 +140,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }**/
 
     // Deleting single contact
-    public void deleteSecurity(Security security) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_SECURITY, KEY_TIME + " = ?",
-                new String[] { String.valueOf(security.getTime()) });
-        db.close();
-    }
+//    public void deleteSecurity(Security security) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.delete(TABLE_SECURITY, KEY_TIME + " = ?",
+//                new String[] { String.valueOf(security.getTime()) });
+//        db.close();
+//    }
 
 
     // Getting contacts Count

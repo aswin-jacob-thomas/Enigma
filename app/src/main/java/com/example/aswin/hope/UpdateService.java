@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -121,15 +122,34 @@ public class UpdateService extends Service implements SensorEventListener {
         boolean screenOn = intent.getBooleanExtra("screen_state", false);*/
         boolean screenOff= ScreenReciever.screenOff;
         Log.d(String.valueOf(ScreenReciever.screenOff),"screen thing");
-        if(screenOff) {
-            List<Security> security = db.getAllSecurity();
+//        if(screenOff) {
+//            List<Security> security = db.getAllSecurity();
+//
+//            for (Security cn : security) {
+//                String log = "Id: " + cn.getTime() + " ,ACCX: " + cn.getAccx() + " ,ACCY: " + cn.getAccy()+" ,ACCZ: " + cn.getAccz();
+//                // Writing Contacts to log
+//                //Log.d("fourth",cn.getAccz());
+//                String logi = "y is this"+cn.getAccz();
+//                Log.d("Name: ", logi);
+//                Security fi = db.getSecurity(10);
+//                String shi = "shi" + fi.getAccz();
+//                Log.d("thisi shit",shi);
+//            }
+//        }
+        if(screenOff){
+            Cursor res = db.getAllSecurity();
 
-            for (Security cn : security) {
-                String log = "Id: " + cn.getTime() + " ,Name: " + cn.getAccx() + " ,Phone: " + cn.getAccy();
-                // Writing Contacts to log
-                Log.d("Name: ", log);
+            StringBuffer buffer = new StringBuffer();
+            while (res.moveToNext()) {
+                buffer.append("TIME:"+ res.getString(0));
+                buffer.append("ACCX :"+ res.getString(1));
+                buffer.append("ACCY:"+ res.getString(2));
+                buffer.append("ACCZ :"+ res.getString(3)+"\n");
             }
+            Log.d("hihi",buffer.toString());
+
         }
+
        // Log.d("debug","getting something");
         if (!screenOff) {
             // your code
@@ -169,10 +189,10 @@ public class UpdateService extends Service implements SensorEventListener {
 
             SimpleDateFormat railwaytime = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String timenow = railwaytime.format(new Date());
-            db.addSecurity(new Security(1,"2",timenow,dayOfTheWeek));
+            //db.addSecurity(new Security(1,"2",dayOfTheWeek,"fish"));
             Time today = new Time(Time.getCurrentTimezone());
             today.setToNow();
-
+            db.addSecurity(new Security(Integer.parseInt(timenow),"7",dayOfTheWeek,"10"));
             //today.monthDay Day of the month (1-31)
             // today.month Month (0-11)
             // today.year Year
