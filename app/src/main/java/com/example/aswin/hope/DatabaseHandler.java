@@ -12,6 +12,7 @@ package com.example.aswin.hope;
         import android.database.Cursor;
         import android.database.sqlite.SQLiteDatabase;
         import android.database.sqlite.SQLiteOpenHelper;
+        import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -60,16 +61,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
 
     // Adding new contact
-    void addContact(Security security) {
+    void addSecurity(Security security) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_TIME,security.getTime());
         values.put(KEY_ACCX, security.getAccx());
         values.put(KEY_ACCY, security.getAccy());
         values.put(KEY_ACCZ, security.getAccz());
 
         // Inserting Row
         db.insert(TABLE_SECURITY, null, values);
+        Log.d("adding","dbpart");
         db.close(); // Closing database connection
     }
 

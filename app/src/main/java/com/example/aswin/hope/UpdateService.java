@@ -18,11 +18,16 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.text.format.DateFormat;
+import android.text.format.Time;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.aswin.info.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +39,8 @@ public class UpdateService extends Service implements SensorEventListener {
     private Timer mTimer;
     private boolean shouldDo=true;
     public int value=1;
+    public DatabaseHandler db = new DatabaseHandler(this);
+
 
     @Override
     public void onCreate() {
@@ -114,8 +121,15 @@ public class UpdateService extends Service implements SensorEventListener {
         boolean screenOn = intent.getBooleanExtra("screen_state", false);*/
         boolean screenOff= ScreenReciever.screenOff;
         Log.d(String.valueOf(ScreenReciever.screenOff),"screen thing");
+        if(screenOff) {
+            List<Security> security = db.getAllSecurity();
 
-
+            for (Security cn : security) {
+                String log = "Id: " + cn.getTime() + " ,Name: " + cn.getAccx() + " ,Phone: " + cn.getAccy();
+                // Writing Contacts to log
+                Log.d("Name: ", log);
+            }
+        }
        // Log.d("debug","getting something");
         if (!screenOff) {
             // your code
@@ -149,8 +163,24 @@ public class UpdateService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         if (value==1) {
             Log.d("final", "data changed");
-            //Toast.makeText(this, "collecting", Toast.LENGTH_SHORT).show();
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE");    //will give the value of the current weekday
+            Date d = new Date();
+            String dayOfTheWeek = sdf.format(d);
+
+            SimpleDateFormat railwaytime = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+            String timenow = railwaytime.format(new Date());
+            db.addSecurity(new Security(1,"2",timenow,dayOfTheWeek));
+            Time today = new Time(Time.getCurrentTimezone());
+            today.setToNow();
+
+            //today.monthDay Day of the month (1-31)
+            // today.month Month (0-11)
+            // today.year Year
+            //today.format("%k:%M:%S")
+
+
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
 //            xText.setText("X : " + event.values[0]);
 //            yText.setText("Y : " + event.values[1]);
 //            zText.setText("Z : " + event.values[2]);
